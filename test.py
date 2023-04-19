@@ -26,5 +26,3 @@ class RepeatTimer(Timer):
 ##We are now creating a thread timer and controling it  
 timer = RepeatTimer(1,display,['Repeating'])  
 timer.start() #recalling run  
-print('Threading started')  
-print('Threading finishing') 
