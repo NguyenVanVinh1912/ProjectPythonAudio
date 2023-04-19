@@ -29,16 +29,15 @@ class MainWindow(QMainWindow):
     songDao = SongDao()
     controller = MusicController()
     __playMusic=False
-    index = 0
+    index = 2
     timer = ""
     callBackMusic = False
-    temp = 0
     ran = False
     volumn = True
     valueVolumn = 50
     valueVolumnOld = 50
     cellSelect = -1
-   
+    currentTime = 0
     def __init__(self):
         super().__init__()
         self.uic= Ui_MainWindow()
@@ -53,16 +52,17 @@ class MainWindow(QMainWindow):
         self.uic.ngau_nhien.clicked.connect(self.randomMusic)
         self.uic.loa_active.clicked.connect(self.setVolumn)
         self.uic.table_list.cellClicked.connect(self.setCellClick)
+        self.uic.tim_kiem.textChanged.connect(self.searchText)
         self.uic.volume.setValue(self.valueVolumn)
         self.uic.volume.valueChanged.connect(self.setValueVolumn)
         self.list = self.songDao.SelectList()
         self.timer = RepeatTimer(1,self.display) 
 
-
+        self.selectListType()
+        self.uic.select.currentTextChanged.connect(self.on_combobox_changed)
         self.uic.noi_dung_mp3.setMinimum(0)
         self.uic.noi_dung_mp3.setValue(0)
         self.add_guest()
-        
         # #QMediaPlayer
         # self.mediaPlayer = QMediaPlayer(None,QMediaPlayer.VideoSurface)
         # self.mediaPlayer.setMedia(QMediaContent(QUrl.fromLocalFile('kk.mp3')))
@@ -71,7 +71,38 @@ class MainWindow(QMainWindow):
         # self.videoWidget=QVideoWidget()
         # self.uic.verticalLayout.addWidget(self.videoWidget)
         # self.mediaPlayer.setVideoOutput(self.videoWidget)
+        self.uic.noi_dung_mp3.valueChanged.connect(self.setCurrentTime)
 
+    #tìm kiếm
+    def searchText(self):
+        text = self.uic.tim_kiem.text()
+        self.list = self.controller.searchText(text)
+        self.uic.table_list.clear()
+        self.add_guest()
+    #tua nhạc
+    def setCurrentTime(self):
+        value = int(self.uic.noi_dung_mp3.value())
+        if value > int(self.currentTime) or value < int(self.currentTime):
+            if self.currentTime != 0 :
+                pygame.mixer.music.play(0,value)
+                self.uic.noi_dung_mp3.setValue(value)
+                self.currentTime = value
+
+    # đưa danh sách loại nhạc
+    def selectListType(self):
+        listType = self.controller.listTypeDao()
+        self.uic.select.addItem("Tất cả")
+        for value in listType:
+            self.uic.select.addItem(value.name)
+    def on_combobox_changed(self,value):
+        self.listTemp.clear()
+        if value != "Tất cả":
+            self.list = self.controller.searchListSongToType(value)
+        else:
+            self.list = self.songDao.SelectList()
+        self.uic.table_list.clear()
+        self.add_guest()
+        
     #bảng danh sách
     def add_guest(self):
         rowPosition = self.uic.table_list.rowCount()
@@ -96,6 +127,7 @@ class MainWindow(QMainWindow):
         header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
         header.setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeToContents)
         self.listTemp.clear()
+        
         index = 0
         for value in self.list:
             name = value.name
@@ -142,6 +174,7 @@ class MainWindow(QMainWindow):
         pygame.mixer.music.stop() 
         self.__playMusic = False
         self.uic.noi_dung_mp3.setValue(0)
+    
     #hàng đợi nhạc
     def queuMusic(self):
         for value in self.list:
@@ -154,23 +187,24 @@ class MainWindow(QMainWindow):
             tong += int(phut) * 60 + int(giay)
         return tong   
 
-    def display(self):  
-        mi = int(pygame.mixer.music.get_pos()/1000/60)
+    def display(self):
+        self.currentTime = self.currentTime + 1
+        mi = int(self.currentTime/60)
         if(mi < 10):
             mi = "0" + str(mi)
-        second = int(pygame.mixer.music.get_pos()/1000%60)
+        second = int(self.currentTime%60)
         if(second < 10):
             second = "0" + str(second)
-        
-       
-        if str(mi)+":"+str(second) == "00:59":
-           self.temp += 1
-        if self.temp == 2: 
-            self.nextMusic()
-            self.restartTimer()
-            self.temp = 0
         self.uic.time_label.setText( "{}:{}".format(mi, second))
         self.uic.noi_dung_mp3.setValue(int(mi)*60+int(second))
+        if int(self.currentTime) >= self.duration(self.list[self.index].link)-5:
+            self.uic.noi_dung_mp3.setValue(0)
+            self.uic.time_label.setText( "{}:{}".format("00", "00"))
+            cel = self.findIndexSongTable(self.index)
+            self.uic.table_list.selectRow(cel)
+            self.nextMusic()
+            self.restartTimer()
+
     #lui bài hát
     def prevMusic(self):
         if(self.callBackMusic == True):
@@ -202,9 +236,10 @@ class MainWindow(QMainWindow):
         self.playMusic()
         self.restartTimer()
     def playMusic(self):
+        self.currentTime = 0
         image = self.list[self.index].image
         linkSong = self.list[self.index].link
-        maxTime = self.duration(linkSong)
+        maxTime = self.duration(linkSong)-5
         #maxTime = 300
         pygame.mixer.music.load(linkSong)
         self.uic.ten_bai_hat.setText(self.list[self.index].name)
@@ -220,8 +255,6 @@ class MainWindow(QMainWindow):
         pygame.mixer.music.play()
     def random(self):
         return random.randint(0, len(self.list)-2)
-    def currentime(self):
-        print(pygame.mixer.music.get_pos()/1000)
     def pause_music(self):
         #dừng bài hát
         pygame.mixer.music.pause()

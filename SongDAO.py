@@ -27,11 +27,14 @@ class SongDao:
         mydb.commit()
     def searchTypeId(self,id):
         s = [id]
-        self.connect.execute("select name from Song where id = %s",s)
+        self.connect.execute("select * from Song where idType = %s",s)
         myresult = self.connect.fetchall()
-        name  = myresult[0][1]
+        list = []
+        for x in myresult:
+            value =  Music(x[0],x[1],x[2],x[3],x[4],x[5])
+            list.append(value)
         mydb.commit()
-        return name
+        return list
     def searchTypeName(self,name):
         s = [name]
         self.connect.execute("select * from Song where name = %s",s)
@@ -45,3 +48,35 @@ class SongDao:
         m = Music(int(id),name,link,image,int(idType),int(idSinger))
         mydb.commit()
         return m
+    def searchListName(self,name):
+        s = [name]
+        self.connect.execute("select * from Song where name = %s",s)
+        myresult = self.connect.fetchall()
+        list = []
+        for x in myresult:
+            value =  Music(x[0],x[1],x[2],x[3],x[4],x[5])
+            list.append(value)
+        mydb.commit()
+        return list
+    def searchListSongJoinType(self,id):
+        s = [id]
+        self.connect.execute("select Song.id,Song.name,Song.link,Song.image,Song.idType,Song.idSinger"+
+                              "from Song INNER JOIN TypeSong on Song.idType=TypeSong.id where TypeSong.id = %s",s)
+        myresult = self.connect.fetchall()
+        list = []
+        for x in myresult:
+            value =  Music(x[0],x[1],x[2],x[3],x[4],x[5])
+            list.append(value)
+        mydb.commit()
+        return list
+    def searchListSongJoinSinger(self,id):
+        s = [id]
+        self.connect.execute("select Song.id,Song.name,Song.link,Song.image,Song.idType,Song.idSinger"+
+                              "from Song INNER JOIN Singer on Song.idSinger=Singer.id where Singer.id = %s",s)
+        myresult = self.connect.fetchall()
+        list = []
+        for x in myresult:
+            value =  Music(x[0],x[1],x[2],x[3],x[4],x[5])
+            list.append(value)
+        mydb.commit()
+        return list
