@@ -25,6 +25,7 @@ class MainWindow(QMainWindow):
     
     
     list = []
+    listTemp = []
     songDao = SongDao()
     controller = MusicController()
     __playMusic=False
@@ -36,6 +37,7 @@ class MainWindow(QMainWindow):
     volumn = True
     valueVolumn = 50
     valueVolumnOld = 50
+    cellSelect = -1
    
     def __init__(self):
         super().__init__()
@@ -50,10 +52,12 @@ class MainWindow(QMainWindow):
         self.uic.chuyen_bai.clicked.connect(self.nextMusic)
         self.uic.ngau_nhien.clicked.connect(self.randomMusic)
         self.uic.loa_active.clicked.connect(self.setVolumn)
+        self.uic.table_list.cellClicked.connect(self.setCellClick)
         self.uic.volume.setValue(self.valueVolumn)
         self.uic.volume.valueChanged.connect(self.setValueVolumn)
         self.list = self.songDao.SelectList()
         self.timer = RepeatTimer(1,self.display) 
+
 
         self.uic.noi_dung_mp3.setMinimum(0)
         self.uic.noi_dung_mp3.setValue(0)
@@ -73,6 +77,8 @@ class MainWindow(QMainWindow):
         rowPosition = self.uic.table_list.rowCount()
         #chọn full
         self.uic.table_list.setSelectionBehavior(QtWidgets.QTableView.SelectRows)
+        self.uic.table_list.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.uic.table_list.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Fixed)
         self.uic.table_list.insertRow(rowPosition)
         label = [
                  "Tên bài hát",
@@ -89,7 +95,7 @@ class MainWindow(QMainWindow):
         header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
         header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
         header.setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeToContents)
-
+        self.listTemp.clear()
         index = 0
         for value in self.list:
             name = value.name
@@ -99,6 +105,9 @@ class MainWindow(QMainWindow):
             self.uic.table_list.setItem(index,1, QtWidgets.QTableWidgetItem(str(type)))
             self.uic.table_list.setItem(index,2,QtWidgets.QTableWidgetItem(str(singer)))
             index = index+1
+            self.listTemp.append(value)
+    def setCellClick(self, cel,col):
+        self.cellSelect = cel
     #thời gian thực
     def duration(self, song):
         return int(float((ffmpeg.probe(song)['format']['duration'])))
@@ -195,15 +204,18 @@ class MainWindow(QMainWindow):
     def playMusic(self):
         image = self.list[self.index].image
         linkSong = self.list[self.index].link
-        # maxTime = self.duration(linkSong)
-        maxTime = 300
+        maxTime = self.duration(linkSong)
+        #maxTime = 300
         pygame.mixer.music.load(linkSong)
         self.uic.ten_bai_hat.setText(self.list[self.index].name)
         if(image != ""):
             self.uic.label.setPixmap(QtGui.QPixmap(image))
         else:
             self.uic.label.setPixmap(QtGui.QPixmap("./image/tai_nghe.jpg"))
+        cel = self.findIndexSongTable(self.index)
 
+        #index = self.uic.table_list.model().index(cel, 0)
+        self.uic.table_list.selectRow(cel)
         self.uic.noi_dung_mp3.setMaximum(maxTime)
         pygame.mixer.music.play()
     def random(self):
@@ -214,11 +226,32 @@ class MainWindow(QMainWindow):
         #dừng bài hát
         pygame.mixer.music.pause()
         self.timer.cancel()
+    def findIndexSong(self,index):
+        song = self.listTemp[index]
         
+        point = 0
+        for value in self.list:
+            if(song.id == value.id):
+                return point
+            point = point+1
+    def findIndexSongTable(self,index):
+        song = self.list[index]
+        
+        point = 0
+        for value in self.listTemp:
+            if(song.id == value.id):
+                return point
+            point = point+1
     def show_music(self):
         # self.mediaPlayer.play()
         # Tải tệp nhạc vào bộ nhớ
-        if(self.__playMusic == False):   
+        if(self.cellSelect >=0):
+            self.index = self.findIndexSong(self.cellSelect)
+            self.cellSelect = -1
+            self.playMusic()
+            self.restartTimer()
+            self.__playMusic = True
+        elif(self.__playMusic == False):
             self.playMusic()
             self.restartTimer()
             self.__playMusic = True
