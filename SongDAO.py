@@ -80,3 +80,9 @@ class SongDao:
             list.append(value)
         mydb.commit()
         return list
+    def addMusic(self,link,name):
+        maxId = len(self.SelectList())
+        s = [str(maxId),name,link,'','0','0']
+        self.connect.execute("insert into Song(id,name,link,image,idType,idSinger)"+
+                             "Values(%s,%s,%s,%s,%s,%s)",s)
+    

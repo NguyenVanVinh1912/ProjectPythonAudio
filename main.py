@@ -5,6 +5,10 @@ import pygame
 import time  
 import ffmpeg
 from threading import Timer  
+from tkinter import messagebox
+from tkinter import filedialog
+import tkinter
+import os
 # from timer import timer
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -57,7 +61,7 @@ class MainWindow(QMainWindow):
         self.uic.volume.valueChanged.connect(self.setValueVolumn)
         self.list = self.songDao.SelectList()
         self.timer = RepeatTimer(1,self.display) 
-
+        self.uic.pushButton.clicked.connect(self.addMusicToFile)
         self.selectListType()
         self.uic.select.currentTextChanged.connect(self.on_combobox_changed)
         self.uic.noi_dung_mp3.setMinimum(0)
@@ -72,7 +76,24 @@ class MainWindow(QMainWindow):
         # self.uic.verticalLayout.addWidget(self.videoWidget)
         # self.mediaPlayer.setVideoOutput(self.videoWidget)
         self.uic.noi_dung_mp3.valueChanged.connect(self.setCurrentTime)
+    #thêm bài hát từ file
+    def addMusicToFile(self):    
+        root =  tkinter.Tk()
+        root.withdraw() #use to hide tkinter window
 
+        currdir = "/media/tronghk/Workspace/"
+        root.sourceFile = filedialog.askopenfilename(parent=root, initialdir= currdir, title='Please select a directory')
+        if len(root.sourceFile) > 0:
+            link = root.sourceFile
+            name = os.path.basename(root.sourceFile)
+            name = name[:-4]
+            self.controller.addMusic(link,name)
+        
+
+    def read_file(file_name):
+        file_handle = open(file_name)
+        print (file_handle.read())
+        file_handle.close()
     #tìm kiếm
     def searchText(self):
         text = self.uic.tim_kiem.text()
@@ -97,7 +118,7 @@ class MainWindow(QMainWindow):
     def on_combobox_changed(self,value):
         self.listTemp.clear()
         if value != "Tất cả":
-            self.list = self.controller.searchListSongToType(value)
+            self.list = self.controller.searchListSongType(value)
         else:
             self.list = self.songDao.SelectList()
         self.uic.table_list.clear()
@@ -215,6 +236,7 @@ class MainWindow(QMainWindow):
             self.index -= 1   
         else:
             self.index = len(self.list)-1
+        
         #chơi nhạc
         self.playMusic()
         self.restartTimer()

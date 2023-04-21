@@ -14,7 +14,7 @@ class MusicController:
         return self.singerDao.searchId(id)
     def listTypeDao(self):
         return self.typeDao.SelectListType()
-    def searchListSongToType(self,type):
+    def searchListSongType(self,type):
         idType = self.typeDao.searchName(type)
         return self.songDao.searchTypeId(idType)
     def searchText(self, text):
@@ -76,3 +76,5 @@ class MusicController:
         return result
     def listSong(self):
         return self.songDao.SelectList()
+    def addMusic(self,link,name):
+        self.songDao.addMusic(link,name)
