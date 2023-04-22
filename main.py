@@ -88,6 +88,8 @@ class MainWindow(QMainWindow):
             name = os.path.basename(root.sourceFile)
             name = name[:-4]
             self.controller.addMusic(link,name)
+            self.list = self.controller.listSong()
+            self.add_guest()
         
 
     def read_file(file_name):
@@ -257,38 +259,44 @@ class MainWindow(QMainWindow):
             self.index = 0
         self.playMusic()
         self.restartTimer()
+    def showMessageError(self):
+        messagebox.showinfo("Error", "Không tìm thấy nguồn bài hát này")
     def playMusic(self):
         self.currentTime = 0
         image = self.list[self.index].image
         linkSong = self.list[self.index].link
-        maxTime = self.duration(linkSong)-5
+        
         #maxTime = 300
-        pygame.mixer.music.load(linkSong)
-        self.uic.ten_bai_hat.setText(self.list[self.index].name)
-        if(image != ""):
-            self.uic.label.setPixmap(QtGui.QPixmap(image))
+        if(os.path.isfile(linkSong)):
+            maxTime = self.duration(linkSong)-5
+            pygame.mixer.music.load(linkSong)
+            self.uic.ten_bai_hat.setText(self.list[self.index].name)
+            if(image != ""):
+                self.uic.label.setPixmap(QtGui.QPixmap(image))
+            else:
+                self.uic.label.setPixmap(QtGui.QPixmap("./image/tai_nghe.jpg"))
+            cel = self.findIndexSongTable(self.index)
+            #index = self.uic.table_list.model().index(cel, 0)
+            self.uic.table_list.selectRow(cel)
+            self.uic.noi_dung_mp3.setMaximum(maxTime)
+            pygame.mixer.music.play()
         else:
-            self.uic.label.setPixmap(QtGui.QPixmap("./image/tai_nghe.jpg"))
-        cel = self.findIndexSongTable(self.index)
-
-        #index = self.uic.table_list.model().index(cel, 0)
-        self.uic.table_list.selectRow(cel)
-        self.uic.noi_dung_mp3.setMaximum(maxTime)
-        pygame.mixer.music.play()
+            self.showMessageError()
     def random(self):
         return random.randint(0, len(self.list)-2)
+     #dừng bài hát
     def pause_music(self):
-        #dừng bài hát
         pygame.mixer.music.pause()
         self.timer.cancel()
+    #tìm vị trí bài hát
     def findIndexSong(self,index):
         song = self.listTemp[index]
-        
         point = 0
         for value in self.list:
             if(song.id == value.id):
                 return point
             point = point+1
+    #tìm vị trí bài hát trong bảng
     def findIndexSongTable(self,index):
         song = self.list[index]
         
@@ -297,6 +305,7 @@ class MainWindow(QMainWindow):
             if(song.id == value.id):
                 return point
             point = point+1
+    #hiển thị 
     def show_music(self):
         # self.mediaPlayer.play()
         # Tải tệp nhạc vào bộ nhớ
