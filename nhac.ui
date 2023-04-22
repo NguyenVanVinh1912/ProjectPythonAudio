@@ -17,10 +17,10 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>30</y>
-      <width>621</width>
-      <height>291</height>
+      <x>100</x>
+      <y>80</y>
+      <width>421</width>
+      <height>221</height>
      </rect>
     </property>
     <property name="layoutDirection">
@@ -483,7 +483,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Home</string>
+     <string>Trang chủ</string>
     </property>
    </widget>
    <widget class="QPushButton" name="thu_vien">
@@ -496,7 +496,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Library</string>
+     <string>Thư viện</string>
     </property>
    </widget>
   </widget>

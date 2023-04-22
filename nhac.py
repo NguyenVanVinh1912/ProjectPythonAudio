@@ -18,7 +18,7 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(0, 30, 621, 291))
+        self.label.setGeometry(QtCore.QRect(100, 80, 421, 221))
         self.label.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.label.setText("")
         self.label.setPixmap(QtGui.QPixmap("image/tai_nghe.jpg"))
@@ -215,8 +215,8 @@ class Ui_MainWindow(object):
         self.pushButton.setText(_translate("MainWindow", "Chọn file"))
         self.time_label.setText(_translate("MainWindow", "00:00"))
         self.ten_bai_hat.setText(_translate("MainWindow", "TextLabel"))
-        self.pushButton_2.setText(_translate("MainWindow", "Home"))
-        self.thu_vien.setText(_translate("MainWindow", "Library"))
+        self.pushButton_2.setText(_translate("MainWindow", "Trang chủ"))
+        self.thu_vien.setText(_translate("MainWindow", "Thư viện"))
 
 
 if __name__ == "__main__":
