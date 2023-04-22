@@ -17,6 +17,7 @@ class Main_List_Music_MainWindow(QMainWindow):
         self.uic.tro_ve.clicked.connect(self.ve_main)
 
     def ve_main(self):
+        from main import MainWindow
         # Khởi tạo QStackedWidget
         self.stacked_widget = QStackedWidget(self)
         
@@ -24,7 +25,7 @@ class Main_List_Music_MainWindow(QMainWindow):
         self.main_widget = Main_List_Music_MainWindow()
         # self.main_widget.setObjectName("MainWidget")
         # self.main_widget.setStyleSheet("#MainWidget { background-color: #000; }")
-        self.thu_vien = QPushButton("Hãy click tôi để chuyển vào thư viện nhé !!!", self.main_widget)
+        self.thu_vien = QPushButton("Hãy click tôi để chuyển vào trang chủ nhé nhé !!!", self.main_widget)
         self.thu_vien.setGeometry(50, 50, 250, 50)
         self.thu_vien.clicked.connect(self.show_main)
         
@@ -36,6 +37,7 @@ class Main_List_Music_MainWindow(QMainWindow):
         
     def show_main(self):
         self.stacked_widget.setCurrentWidget(self.list_music_widget)
+        
     
     pygame
 # Kết thúc game

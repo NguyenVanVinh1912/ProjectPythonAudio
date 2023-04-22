@@ -72,6 +72,7 @@ class MainWindow(QMainWindow):
     
         
     def show_list_music(self):
+        from main_list_music import Main_List_Music_MainWindow
         # Khởi tạo QStackedWidget
         self.stacked_widget = QStackedWidget(self)
         
@@ -91,6 +92,7 @@ class MainWindow(QMainWindow):
         
     def show_main_list_music(self):
         self.stacked_widget.setCurrentWidget(self.list_music_widget)
+        
         
         
 
