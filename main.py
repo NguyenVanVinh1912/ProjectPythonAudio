@@ -44,13 +44,10 @@ class MainWindow(QMainWindow):
     volumn = True
     valueVolumn = 50
     valueVolumnOld = 50
-<<<<<<< HEAD
     cellSelect = -1
     currentTime = 0
-=======
 
    
->>>>>>> ebe275a95c49dcabae671ea6ada399049b49b465
     def __init__(self):
         super().__init__()
         self.uic= Ui_MainWindow()
@@ -70,18 +67,14 @@ class MainWindow(QMainWindow):
         self.uic.volume.valueChanged.connect(self.setValueVolumn)
         self.list = self.songDao.SelectList()
         self.timer = RepeatTimer(1,self.display) 
-<<<<<<< HEAD
         self.uic.pushButton.clicked.connect(self.addMusicToFile)
         self.selectListType()
         self.uic.select.currentTextChanged.connect(self.on_combobox_changed)
-=======
 
->>>>>>> ebe275a95c49dcabae671ea6ada399049b49b465
         self.uic.noi_dung_mp3.setMinimum(0)
         self.uic.noi_dung_mp3.setMaximum(300)
         self.uic.noi_dung_mp3.setValue(0)
         self.add_guest()
-<<<<<<< HEAD
         # #QMediaPlayer
         # self.mediaPlayer = QMediaPlayer(None,QMediaPlayer.VideoSurface)
         # self.mediaPlayer.setMedia(QMediaContent(QUrl.fromLocalFile('kk.mp3')))
@@ -95,7 +88,6 @@ class MainWindow(QMainWindow):
     def addMusicToFile(self):    
         root =  tkinter.Tk()
         root.withdraw() #use to hide tkinter window
-=======
         
         #chuyên trang 
         self.uic.thu_vien.clicked.connect(self.show_list_music)
@@ -127,7 +119,6 @@ class MainWindow(QMainWindow):
         
         
 
->>>>>>> ebe275a95c49dcabae671ea6ada399049b49b465
 
         currdir = "/"
         root.sourceFile = filedialog.askopenfilename(parent=root, initialdir= currdir, title='Please select a directory')
@@ -195,12 +186,9 @@ class MainWindow(QMainWindow):
         header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
         header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
         header.setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeToContents)
-<<<<<<< HEAD
         self.listTemp.clear()
         
-=======
 
->>>>>>> ebe275a95c49dcabae671ea6ada399049b49b465
         index = 0
         for value in self.list:
             name = value.name
@@ -312,7 +300,6 @@ class MainWindow(QMainWindow):
         self.currentTime = 0
         image = self.list[self.index].image
         linkSong = self.list[self.index].link
-<<<<<<< HEAD
         
         #maxTime = 300
         if(os.path.isfile(linkSong)):
@@ -330,7 +317,6 @@ class MainWindow(QMainWindow):
             pygame.mixer.music.play()
         else:
             self.showMessageError()
-=======
         # maxTime = self.duration(linkSong)
         maxTime = 300
         pygame.mixer.music.load(linkSong)
@@ -342,14 +328,12 @@ class MainWindow(QMainWindow):
 
         self.uic.noi_dung_mp3.setMaximum(maxTime)
         pygame.mixer.music.play()
->>>>>>> ebe275a95c49dcabae671ea6ada399049b49b465
     def random(self):
         return random.randint(0, len(self.list)-2)
      #dừng bài hát
     def pause_music(self):
         pygame.mixer.music.pause()
         self.timer.cancel()
-<<<<<<< HEAD
     #tìm vị trí bài hát
     def findIndexSong(self,index):
         song = self.listTemp[index]
@@ -368,9 +352,7 @@ class MainWindow(QMainWindow):
                 return point
             point = point+1
     #hiển thị 
-=======
         
->>>>>>> ebe275a95c49dcabae671ea6ada399049b49b465
     def show_music(self):
         # self.mediaPlayer.play()
         # Tải tệp nhạc vào bộ nhớ
