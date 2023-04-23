@@ -64,11 +64,8 @@ class MainWindow(QMainWindow):
         self.uic.chuyen_bai.clicked.connect(self.nextMusic)
         self.uic.ngau_nhien.clicked.connect(self.randomMusic)
         self.uic.loa_active.clicked.connect(self.setVolumn)
-<<<<<<< HEAD
         self.uic.table_list.cellClicked.connect(self.setCellClick)
         self.uic.tim_kiem.textChanged.connect(self.searchText)
-=======
->>>>>>> ebe275a95c49dcabae671ea6ada399049b49b465
         self.uic.volume.setValue(self.valueVolumn)
         self.uic.volume.valueChanged.connect(self.setValueVolumn)
         self.list = self.songDao.SelectList()
