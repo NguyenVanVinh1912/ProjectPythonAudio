@@ -27,3 +27,10 @@ class TypeDao:
         name  = myresult[0][1]
         mydb.commit()
         return name
+    def searchName(self,name):
+        s = [name]
+        self.connect.execute("select * from TypeSong where name = %s",s)
+        myresult = self.connect.fetchall()
+        id  = myresult[0][0]
+        mydb.commit()
+        return int(id)
