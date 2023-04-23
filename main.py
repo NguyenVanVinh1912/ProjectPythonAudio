@@ -81,7 +81,7 @@ class MainWindow(QMainWindow):
         root =  tkinter.Tk()
         root.withdraw() #use to hide tkinter window
 
-        currdir = "/media/tronghk/Workspace/"
+        currdir = "/"
         root.sourceFile = filedialog.askopenfilename(parent=root, initialdir= currdir, title='Please select a directory')
         if len(root.sourceFile) > 0:
             link = root.sourceFile
