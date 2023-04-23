@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>624</width>
-    <height>874</height>
+    <width>641</width>
+    <height>1000</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,9 +18,9 @@
     <property name="geometry">
      <rect>
       <x>100</x>
-      <y>80</y>
+      <y>60</y>
       <width>421</width>
-      <height>221</height>
+      <height>241</height>
      </rect>
     </property>
     <property name="layoutDirection">
@@ -39,10 +39,10 @@
    <widget class="QWidget" name="widget" native="true">
     <property name="geometry">
      <rect>
-      <x>0</x>
+      <x>10</x>
       <y>440</y>
       <width>621</width>
-      <height>401</height>
+      <height>571</height>
      </rect>
     </property>
     <widget class="QPushButton" name="ngau_nhien">
@@ -339,7 +339,7 @@
       <rect>
        <x>0</x>
        <y>100</y>
-       <width>621</width>
+       <width>622</width>
        <height>261</height>
       </rect>
      </property>
@@ -505,7 +505,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>624</width>
+     <width>641</width>
      <height>26</height>
     </rect>
    </property>
